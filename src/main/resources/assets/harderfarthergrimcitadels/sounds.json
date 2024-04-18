@@ -1,0 +1,17 @@
+{
+  "dust": {
+    "sounds": [
+      "harderfarthergrimcitadels:music/dustymemories"
+    ]
+  },
+  "laby": {
+    "sounds": [
+      "harderfarthergrimcitadels:music/labyrinthlostdreams"
+    ]
+  },
+  "lake": {
+    "sounds": [
+      "harderfarthergrimcitadels:music/lakeofdestiny"
+    ]
+  }
+}

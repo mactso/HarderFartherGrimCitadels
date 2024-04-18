@@ -10,6 +10,7 @@ import com.mactso.harderfarthergrimcitadels.blockentities.ModBlockEntities;
 import com.mactso.harderfarthergrimcitadels.commands.ModCommands;
 import com.mactso.harderfarthergrimcitadels.config.MyConfig;
 import com.mactso.harderfarthergrimcitadels.events.BlockEvents;
+import com.mactso.harderfarthergrimcitadels.events.FogColorsEventHandler;
 import com.mactso.harderfarthergrimcitadels.events.LivingEventMovementHandler;
 import com.mactso.harderfarthergrimcitadels.events.PlayerLoginEventHandler;
 import com.mactso.harderfarthergrimcitadels.events.PlayerTeleportHandler;
@@ -29,6 +30,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -42,7 +44,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegisterEvent;
 
-@Mod("lootcontrolutility")
+@Mod("harderfarthergrimcitadels")
 public class Main {
 
 	    public static final String MODID = "harderfarthergrimcitadels"; 
@@ -72,7 +74,7 @@ public class Main {
 	    @SubscribeEvent
 	    public void setupClient(final FMLClientSetupEvent event) {
 	    	
-//			MinecraftForge.EVENT_BUS.register(new FogColorsEventHandler());
+			MinecraftForge.EVENT_BUS.register(new FogColorsEventHandler());
 			ModBlocks.setRenderLayer();
 			
 	    }
@@ -86,7 +88,7 @@ public class Main {
 		@SubscribeEvent 
 		public void preInit (final FMLCommonSetupEvent event) {
 				Utility.debugMsg(0, MODID + ": Registering Handlers");
-				Utility.debugMsg(0, MODID + ": Registering Handlers");
+
 				MinecraftForge.EVENT_BUS.register(WorldTickHandler.class);
 				MinecraftForge.EVENT_BUS.register(PlayerLoginEventHandler.class);
 				MinecraftForge.EVENT_BUS.register(PlayerTeleportHandler.class);
@@ -101,6 +103,7 @@ public class Main {
 		    @SubscribeEvent
 		    public static void onRegister(final RegisterEvent event)
 		    {
+
 		    	@Nullable
 				IForgeRegistry<Object> fr = event.getForgeRegistry();
 		    	
@@ -124,8 +127,15 @@ public class Main {
 		public static class ForgeEvents {
 
 			@SubscribeEvent
+			public static void onServerAbout(ServerAboutToStartEvent event)
+			{
+				GrimCitadelManager.load(event.getServer());
+			}
+			
+			@SubscribeEvent
 			public static void onServerStopping(ServerStoppingEvent event)
 			{
+				// TODO Does harder farther core need a cleanup as well?
 				GrimCitadelManager.clear();
 				Utility.debugMsg(0, MODID + "Cleanup Successful");
 			}

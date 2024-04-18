@@ -1,5 +1,7 @@
 package com.mactso.harderfarthergrimcitadels.proxy;
 
+import com.mactso.harderfarthergrimcitadels.managers.GrimCitadelManager;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -8,7 +10,8 @@ public class LocalCoreCalls implements IHarderFartherCoreProxy {
 	public static BlockPos CENTER = BlockPos.containing(0,64,0);
 	
 	public float getDifficulty (LivingEntity le) {
-		return 0.0f;
+
+		return GrimCitadelManager.getGrimDifficulty(le);
 	}
 
 	@Override

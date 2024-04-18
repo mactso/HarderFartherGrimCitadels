@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "harderfarthergrimcitadels:block/dead_branches"
+  }
+}

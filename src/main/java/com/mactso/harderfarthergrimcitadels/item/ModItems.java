@@ -28,11 +28,11 @@ public class ModItems {
 
 		LIFE_HEART_STACK = new ItemStack(LIFE_HEART, 1);
 		Utility.setLore(LIFE_HEART_STACK,
-				Component.Serializer.toJson(Component.translatable("item.harderfarther.life_heart.lore")));
+				Component.Serializer.toJson(Component.translatable("item.harderfarthergrimcitadels.life_heart.lore")));
 
 		BURNISHING_STONE_STACK = new ItemStack(BURNISHING_STONE, 1);
 		Utility.setLore(BURNISHING_STONE_STACK,
-				Component.Serializer.toJson(Component.translatable("item.harderfarther.burnishing_stone.lore")));
+				Component.Serializer.toJson(Component.translatable("item.harderfarthergrimcitadels.burnishing_stone.lore")));
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.mactso.harderfarthergrimcitadels.network;
 
-import com.mactso.harderfarthergrimcitadels.events.FogColorsEventHandler;
+import com.mactso.harderfarthergrimcitadels.events.ClientSideDifficultyCache;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.event.network.CustomPayloadEvent.Context;
@@ -21,7 +21,7 @@ public class SyncDifficultyToClientsPacket  {
 		{
 			ctx.enqueueWork( () -> 
 				{
-					FogColorsEventHandler.setLocalDifficulty(message.hardDifficulty, message.grimDifficulty, message.timeDifficulty);
+					ClientSideDifficultyCache.updateClientSideDifficultyCache(message.hardDifficulty, message.grimDifficulty, message.timeDifficulty);
 				}
 			);
 			ctx.setPacketHandled(true);

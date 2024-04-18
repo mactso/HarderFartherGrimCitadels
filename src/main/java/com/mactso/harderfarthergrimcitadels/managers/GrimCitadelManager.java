@@ -21,7 +21,7 @@ import com.mactso.harderfarthergrimcitadels.block.GrimGateBlock;
 import com.mactso.harderfarthergrimcitadels.block.ModBlocks;
 import com.mactso.harderfarthergrimcitadels.block.properties.GrimGateType;
 import com.mactso.harderfarthergrimcitadels.config.MyConfig;
-import com.mactso.harderfarthergrimcitadels.events.FogColorsEventHandler;
+import com.mactso.harderfarthergrimcitadels.events.ClientSideDifficultyCache;
 import com.mactso.harderfarthergrimcitadels.item.ModItems;
 import com.mactso.harderfarthergrimcitadels.network.GrimClientSongPacket;
 import com.mactso.harderfarthergrimcitadels.network.Network;
@@ -672,12 +672,12 @@ public class GrimCitadelManager {
 
 		itemStackToDrop = new ItemStack(ModItems.LIFE_HEART);
 		Utility.setLore(itemStackToDrop,
-				Component.Serializer.toJson(Component.translatable("item.harderfarther.life_heart.lore")));
+				Component.Serializer.toJson(Component.translatable("item.harderfarthergrimcitadels.life_heart.lore")));
 		sBox.setItem(getEmptyContainerSlot(level.getRandom(), sBox), itemStackToDrop);
 
 		itemStackToDrop = new ItemStack(ModItems.BURNISHING_STONE, level.getRandom().nextInt(4) + 2);
 		Utility.setLore(itemStackToDrop,
-				Component.Serializer.toJson(Component.translatable("item.harderfarther.burnishing_stone.lore")));
+				Component.Serializer.toJson(Component.translatable("item.harderfarthergrimcitadels.burnishing_stone.lore")));
 		sBox.setItem(getEmptyContainerSlot(level.getRandom(), sBox), itemStackToDrop);
 
 		double bootsSpeed = 0.04D + level.getRandom().nextDouble() * 0.06D;
@@ -685,9 +685,9 @@ public class GrimCitadelManager {
 				AttributeModifier.Operation.ADDITION);
 		itemStackToDrop = new ItemStack(Items.DIAMOND_BOOTS);
 		itemStackToDrop.addAttributeModifier(Attributes.MOVEMENT_SPEED, am, EquipmentSlot.FEET);
-		itemStackToDrop.setHoverName(Component.translatable("item.harderfarther.grim_boots.name"));
+		itemStackToDrop.setHoverName(Component.translatable("item.harderfarthergrimcitadels.grim_boots.name"));
 		Utility.setLore(itemStackToDrop,
-				Component.Serializer.toJson(Component.translatable("item.harderfarther.grim_boots.lore")));
+				Component.Serializer.toJson(Component.translatable("item.harderfarthergrimcitadels.grim_boots.lore")));
 		sBox.setItem(getEmptyContainerSlot(level.getRandom(), sBox), itemStackToDrop);
 
 	}
@@ -1087,7 +1087,7 @@ public class GrimCitadelManager {
 	// ClientSide
 	public static void playGCOptionalSoundCues(Player cp) {
 
-		float difficulty = FogColorsEventHandler.getServerGrimDifficulty();
+		float difficulty = ClientSideDifficultyCache.getGrimDifficulty();
 		if (difficulty == 0)
 			return;
 
@@ -1123,7 +1123,7 @@ public class GrimCitadelManager {
 				ItemStack itemStackToDrop = new ItemStack(ModItems.BURNISHING_STONE,
 						(int) level.getRandom().nextInt(3) + 1);
 				Utility.setLore(itemStackToDrop, Component.Serializer
-						.toJson(Component.translatable("item.harderfarther.burnishing_stone.lore")));
+						.toJson(Component.translatable("item.harderfarthergrimcitadels.burnishing_stone.lore")));
 				cBox.setItem(getEmptyContainerSlot(level.getRandom(), cBox), itemStackToDrop);
 			}
 			livingfloor = true;

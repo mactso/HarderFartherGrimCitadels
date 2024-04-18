@@ -7,6 +7,7 @@ import com.mactso.harderfarthergrimcitadels.item.ModItems;
 import com.mactso.harderfarthergrimcitadels.managers.GrimCitadelManager;
 import com.mactso.harderfarthergrimcitadels.network.GrimClientSongPacket;
 import com.mactso.harderfarthergrimcitadels.network.Network;
+import com.mactso.harderfarthergrimcitadels.network.SyncDifficultyToClientsPacket;
 import com.mactso.harderfarthergrimcitadels.sounds.ModSounds;
 import com.mactso.harderfarthergrimcitadels.utility.Glooms;
 import com.mactso.harderfarthergrimcitadels.utility.Utility;
@@ -26,12 +27,12 @@ import net.minecraftforge.fml.common.Mod;;
 
 @Mod.EventBusSubscriber()
 public class LivingEventMovementHandler {
-	
+
 	/**
 	 * @param event
 	 */
 	@SubscribeEvent
-	public void onLivingUpdate(LivingTickEvent event) {
+	public static void onLivingUpdate(LivingTickEvent event) {
 
 		LivingEntity le = event.getEntity();
 		RandomSource rand = le.level().getRandom();
@@ -40,10 +41,9 @@ public class LivingEventMovementHandler {
 			if (le instanceof Player cp) {
 				GrimCitadelManager.playGCOptionalSoundCues(cp);
 			}
-			if (FogColorsEventHandler.getServerTimeDifficulty() == 0) {
-				if ((le instanceof Player cp) && (rand.nextInt(144000) == 42)) {
-					GrimSongManager.startSong(ModSounds.NUM_LAKE_DESTINY);
-				}
+			if ((le instanceof Player cp) && (GrimCitadelManager.isInRangeOfGC(le.blockPosition()))
+					&& (rand.nextInt(144000) == 42)) {
+				GrimSongManager.startSong(ModSounds.NUM_LAKE_DESTINY);
 			}
 			return;
 		}
@@ -52,68 +52,49 @@ public class LivingEventMovementHandler {
 
 		if (le instanceof ServerPlayer sp) {
 			Utility.debugMsg(2, "LivingEventMovementHandler");
+			checkLifeHeart(sp);
+			long gameTime = serverLevel.getGameTime();
+			if (gameTime % 10 != le.getId() % 10) // only need to check every half second.
+				return;
+			
+			
+			// TODO Get Difficulty from Proxy.  Get difficulty from GrimManager
+			// Update difficulty cache on Client.
+			int x=3;
+			float difficulty = Main.difficultyCallProxy.getDifficulty(le.blockPosition());
+			float grimDifficulty = GrimCitadelManager.getGrimDifficulty(le);
+			float timeDifficulty = 0.0f;  // zero as far as grim citadel manager knows.
 
-			boolean hasLifeHeart = sp.getInventory().contains(ModItems.LIFE_HEART_STACK);
-
-			if ((sp.getHealth() < sp.getMaxHealth()) && (hasLifeHeart)) {
-				int dice = MyConfig.getGrimLifeheartPulseSeconds() * Utility.TICKS_PER_SECOND;
-				int roll = rand.nextInt(dice);
-				int duration = Utility.FOUR_SECONDS;
-				if (roll == 42) { // once per 2 minutes
-					int slot = sp.getInventory().findSlotMatchingItem(ModItems.LIFE_HEART_STACK);
-					slot /= 9;
-					int healingpower = 1;
-					duration = Utility.FOUR_SECONDS * 3;
-					if (slot != 1) { // first top row no sound
-						float volume = 0.48f; // default loud
-						healingpower = 3;
-						duration = Utility.FOUR_SECONDS;
-
-						if (slot == 3) // second row quiet
-						{
-							volume = 0.12f;
-							healingpower = 2;
-							duration = Utility.FOUR_SECONDS;
-						}
-						if (slot == 3) // third row just over hotbar
-						{
-							volume = 0.24f;
-							healingpower = 2;
-							duration = Utility.FOUR_SECONDS + Utility.FOUR_SECONDS;
-
-						}
-						serverLevel.playSound(null, sp.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.get(),
-								SoundSource.PLAYERS, volume, 0.86f);
-					}
-					Utility.updateEffect((LivingEntity) sp, healingpower, MobEffects.REGENERATION,
-							Utility.FOUR_SECONDS);
-				}
+			if (le instanceof ServerPlayer ) {
+				SyncDifficultyToClientsPacket msg = new SyncDifficultyToClientsPacket(difficulty,grimDifficulty,timeDifficulty);
+				Network.sendToClient(msg, sp);
 			}
 
-			long gameTime = serverLevel.getGameTime();
-
-			float difficulty = Main.difficultyCallProxy.getDifficulty(le.blockPosition());
-
+			
 			if (difficulty > 0) {
-				if (GrimCitadelManager.isGCNear(difficulty)) {
-					Utility.slowFlyingMotion(le);
+				if (GrimCitadelManager.isInRangeOfGC(le.blockPosition())) {
+					if ((difficulty > Utility.Pct95)) {
+						Utility.slowFlyingMotion(le);
+					}
 				}
-				if (gameTime % 10 != le.getId() % 10)
-					return;
+
+
+
+				if ((difficulty > Utility.Pct84)) {
+					if (sp.hasEffect(MobEffects.SLOW_FALLING)) {
+						sp.removeEffect(MobEffects.SLOW_FALLING);
+					}
+				}
 
 				Utility.debugMsg(2, le, "Living Event " + EntityType.getKey((event.getEntity().getType())).toString()
 						+ " dif: " + difficulty);
-				if ((le instanceof ServerPlayer) && (rand.nextInt(300000) == 4242) && (difficulty > Utility.Pct09)) {
+				
+				if ((rand.nextInt(350000) == 4242) && (difficulty > Utility.Pct09)) {
 					Network.sendToClient(new GrimClientSongPacket(ModSounds.NUM_DUSTY_MEMORIES), sp);
 				}
 
-				if ((difficulty > Utility.Pct84)) {
-					if (le.hasEffect(MobEffects.SLOW_FALLING)) {
-						le.removeEffect(MobEffects.SLOW_FALLING);
-					}
-				}
 
-				if (GrimCitadelManager.getGrimDifficulty(le) > 0) {
+				if (Main.difficultyCallProxy.getDifficulty(le.blockPosition()) > 0) {
 					Glooms.doGlooms(serverLevel, gameTime, difficulty, le, Glooms.GRIM);
 					if ((le instanceof ServerPlayer) && (rand.nextInt(144000) == 4242)
 							&& (difficulty > Utility.Pct09)) {
@@ -123,16 +104,57 @@ public class LivingEventMovementHandler {
 
 			}
 
-		} else {
-			// Refactoring:  Boosts now owned by Harderfarthercore
-//			// "enter world event" horked as of 1.19.  Move boosts here..
-//			if (event.getEntity() instanceof Monster me) {
-//				Utility.debugMsg(2, "entering doBoostAbilities");
-//				String eDsc = EntityType.getKey(me.getType()).toString();
-//				Boosts.doBoostAbilities(me, eDsc);
-//			}
 		}
 
+	}
+
+	private static void checkLifeHeart(ServerPlayer sp) {
+
+		boolean hasLifeHeart = sp.getInventory().contains(ModItems.LIFE_HEART_STACK);
+
+		if ((sp.getHealth() < sp.getMaxHealth()) && (hasLifeHeart)) {
+			int dice = MyConfig.getGrimLifeheartPulseSeconds() * Utility.TICKS_PER_SECOND;
+			int roll = sp.level().getRandom().nextInt(dice);
+			int duration = Utility.FOUR_SECONDS;
+			if (roll == 42) { // once per 2 minutes
+
+				int slot = sp.getInventory().findSlotMatchingItem(ModItems.LIFE_HEART_STACK);
+				int row = slot / 9;
+				float volume = 0.0f;
+				int healingpower = 0;
+				int healingduration = 0;
+
+				switch (row) {
+				case 0: // Hotbar
+					volume = 0.48f;
+					healingpower = 3;
+					healingduration = Utility.FOUR_SECONDS;
+					break;
+				case 3: // 3rd Inventory Row
+					volume = 0.36f;
+					healingpower = 2;
+					healingduration = Utility.FOUR_SECONDS * 2;
+					break;
+				case 2: // 2nd Inventory Row
+					volume = 0.24f;
+					healingpower = 2;
+					healingduration = Utility.FOUR_SECONDS;
+					break;
+				case 1: // 1st Inventory Row
+				default:
+					volume = 0.12f;
+					healingpower = 3;
+					healingduration = Utility.FOUR_SECONDS * 3;
+					break;
+				}
+
+				sp.level().playSound(null, sp.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.get(),
+						SoundSource.PLAYERS, volume, 0.86f);
+				Utility.updateEffect((LivingEntity) sp, healingpower, MobEffects.REGENERATION,
+						Utility.FOUR_SECONDS);
+			}
+
+		}
 	}
 
 }

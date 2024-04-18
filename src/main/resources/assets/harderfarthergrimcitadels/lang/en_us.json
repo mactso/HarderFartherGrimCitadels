@@ -1,0 +1,18 @@
+{
+	"item.harderfarthergrimcitadels.burnishing_stone" : "Burnishing Stone",
+	"item.harderfarthergrimcitadels.burnishing_stone.lore" : "Repairs item in off hand.",
+	"item.harderfarthergrimcitadels.life_heart" : "Life Heart",
+	"item.harderfarthergrimcitadels.life_heart.lore" : "Aids against the grim auras and curses.",
+	"item.harderfarthergrimcitadels.grim_boots.name" : "Speedy Boots",
+	"item.harderfarthergrimcitadels.grim_boots.lore" : "Hurry quickly to your next death.",
+	"item.harderfarthergrimcitadels.ancient_armor.name" : "Dorlan Armor",
+	"item.harderfarthergrimcitadels.ancient_sword.name" : "Dorlan Sword",
+	"item.harderfarthergrimcitadels.ancient_sword.lore" : "An Ancient Sword",
+	"item.harderfarthergrimcitadels.ancient_bow.name" : "Fabled Bow",
+	"item.harderfarthergrimcitadels.ancient_bow.lore" : "Lost centuries ago",
+	"item.harderfarthergrimcitadels.ancient_smite_sword.lore" : "A Holy Relic",
+	"item.harderfarthergrimcitadels.ancient_bane_sword.lore" : "Bane of the Shelith",
+	"item.harderfarthergrimcitadels.ancient_pickaxe.name" : "Shatterer of Stone",
+	"item.harderfarthergrimcitadels.ancient_axe.name" : "Cutter of Wood",
+	"item.harderfarthergrimcitadels.ancient_shovel.name" : "Leveler of Hills"
+}
