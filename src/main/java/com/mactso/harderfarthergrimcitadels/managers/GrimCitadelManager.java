@@ -834,10 +834,17 @@ public class GrimCitadelManager {
 
 	public static float getGrimDifficulty(LivingEntity le) {
 
+		BlockPos pos = le.blockPosition();
+		return getGrimDifficulty (pos);
+
+	}
+	
+	
+	public static float getGrimDifficulty (BlockPos pos) {
 
 		float grimDifficulty = 0;
 
-		double closestGrimDistSq = Math.sqrt(GrimCitadelManager.getClosestGrimCitadelDistanceSq(Utility.getBlockPosition(le)));
+		double closestGrimDistSq = Math.sqrt(GrimCitadelManager.getClosestGrimCitadelDistanceSq(pos));
 		double bonusGrimDistSq = Math.sqrt(MyConfig.getGrimCitadelBonusDistanceSq());
 		if (closestGrimDistSq > bonusGrimDistSq)
 			return 0;
@@ -849,8 +856,9 @@ public class GrimCitadelManager {
 		}
 
 		return grimDifficulty;
-
+		
 	}
+
 
 	public static int getGrimRadius() {
 		return MyConfig.getGrimCitadelsRadius();

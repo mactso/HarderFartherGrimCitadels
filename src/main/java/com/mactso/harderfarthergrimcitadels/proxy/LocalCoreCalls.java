@@ -36,10 +36,8 @@ public class LocalCoreCalls implements IHarderFartherCoreProxy {
 	
 	@Override
 	public float getDifficulty(BlockPos pos) {
-		// return difficulty based on grim citadel list only.
-		double maxDistance = 30000.0;  // TASK TODO
-		double difficulty = ( CENTER.distManhattan(pos)) / maxDistance ;
-		return (float) difficulty;
+
+		return GrimCitadelManager.getGrimDifficulty(pos);
 	}
 	
 
