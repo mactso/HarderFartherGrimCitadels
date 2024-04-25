@@ -16,14 +16,24 @@ public class LocalCoreCalls implements IHarderFartherCoreProxy {
 
 	@Override
 	public void addGrimBlockPosListEntry(BlockPos pos, int range) {
-		/* not used in looting mod */
+		/* not used in grimCitadels mod */
+	}
+	@Override
+	public void delGrimBlockPosListEntry(BlockPos pos) {
+		/* not used in grimCitadels mod */
 	}
 	
 	@Override
 	public void addLifeBlockPosListEntry(BlockPos pos, int lifeRange) {
-		/* not used in looting mod */
+		/* not used in GrimCitadels mod */
 	}
 
+	@Override
+	public void delLifeBlockPosListEntry(BlockPos pos) {
+		/* not used in GrimCitadels mod */
+	}
+
+	
 	@Override
 	public float getDifficulty(BlockPos pos) {
 		// return difficulty based on grim citadel list only.

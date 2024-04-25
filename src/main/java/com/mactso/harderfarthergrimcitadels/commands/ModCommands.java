@@ -60,6 +60,10 @@ public class ModCommands {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					printGrimMusicInfo(p);
 					return 1;
+				})).then(Commands.literal("fogInfo").executes(ctx -> {
+					ServerPlayer p = ctx.getSource().getPlayerOrException();
+					printFogInfo(p);
+					return 1;
 				}))
 				.then(Commands.literal("setFogColors")
 						.then(Commands.argument("R", IntegerArgumentType.integer(0, 100))
@@ -79,7 +83,7 @@ public class ModCommands {
 		MyConfig.setGrimFogGreenPercent(g);
 		MyConfig.setGrimFogBluePercent(b);
 		updateGCFogToAllClients((ServerLevel) p.level(), (double) r / 100, (double) g / 100, (double) b / 100);
-		printColorInfo(p);
+		printFogInfo(p);
 		return 1;
 	}
 
@@ -92,12 +96,12 @@ public class ModCommands {
 		}
 	}
 
-	private static void printColorInfo(ServerPlayer p) {
+	private static void printFogInfo(ServerPlayer p) {
 
 		String chatMessage = "\nFog Color Current Values";
 		Utility.sendBoldChat(p, chatMessage, ChatFormatting.DARK_GREEN);
-		chatMessage = "R (" + MyConfig.getGrimFogRedPercent() + ")" + " G (" + MyConfig.getGrimFogGreenPercent() + ")"
-				+ " B (" + MyConfig.getGrimFogBluePercent() + ")";
+		chatMessage = "Red   (" + MyConfig.getGrimFogRedPercent() + ")" + " Green (" + MyConfig.getGrimFogGreenPercent() + ")"
+				+ " Blue  (" + MyConfig.getGrimFogBluePercent() + ")";
 		Utility.sendChat(p, chatMessage, ChatFormatting.GREEN);
 
 	}
@@ -134,19 +138,19 @@ public class ModCommands {
 		BlockPos pPos = p.blockPosition();
 
 		Utility.sendBoldChat(p, "\nGrim Citadel Information", ChatFormatting.DARK_GREEN);
-		String chatMessage = ("   Grim Citadels are Enabled"
-				+ "\n   Nearest Grim Citadel ................................: "
-				+ (int) Math.sqrt(GrimCitadelManager.getClosestGrimCitadelDistanceSq(pPos)) + " meters at " + "\n    "
-				+ GrimCitadelManager.getClosestGrimCitadelPos(pPos)
-				+ "\n   Aura Range ......................................................: "
+		String chatMessage = "   Nearest Grim Citadel ...........................: "
+				+ (int) Math.sqrt(GrimCitadelManager.getClosestGrimCitadelDistanceSq(pPos)) + " blocks away."
+				+ "\n     at .....................................................................: "
+				+ GrimCitadelManager.getClosestGrimCitadelPos(pPos).toShortString()
+				+ "\n   Aura Range .................................................: "
 				+ MyConfig.getGrimCitadelBonusDistance() + " blocks."
-				+ "\n   Player Curse Range ................................: "
+				+ "\n   Player Curse Range ...........................: "
 				+ MyConfig.getGrimCitadelPlayerCurseDistance() + " blocks."
-				+ "\n   Maximum Grim Difficulty ...........................: " + MyConfig.getGrimCitadelMaxBoostValue()
-				+ "\n   Local Difficulty ...........................: " + genFormatedDifficultyString(p)
-				+ "\n   Minimum Number of Grim Citadels.......: " + MyConfig.getGrimCitadelsCount()
-				+ "\n   Citadel Radius  ..............................................: "
-				+ GrimCitadelManager.getGrimRadius());
+				+ "\n   Maximum Grim Difficulty ......................: " + MyConfig.getGrimCitadelMaxBoostValue() +"%"
+				+ "\n   Local Difficulty ........................................: " + genFormatedDifficultyString(p) 
+				+ "\n   Minimum Number of Grim Citadels..: " + MyConfig.getGrimCitadelsCount()
+				+ "\n   Citadel Radius  .........................................: "
+				+ GrimCitadelManager.getGrimRadius();
 		Utility.sendChat(p, chatMessage, ChatFormatting.GREEN);
 
 	}
@@ -168,11 +172,11 @@ public class ModCommands {
 		DecimalFormat df = new DecimalFormat("##.##");
 		String formatted = df.format(difficulty);
 
-		difficultyMessage = formatted + "% at" + p.blockPosition();
+		difficultyMessage = formatted + "%" ;
 		if (MyConfig.isUsingCore()) {
-			difficultyMessage += " (using HarderFartherCore).";
+			difficultyMessage += " (per HF Core)";
 		} else {
-			difficultyMessage += " (using Grim Citadels).";
+			difficultyMessage += " (per Grim Citadels)";
 		}
 		return difficultyMessage;
 	}

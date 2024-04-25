@@ -203,8 +203,6 @@ public class MyConfig {
 
 	public static void pushValues() {
 		COMMON.debugLevel.set(debugLevel);
-
-		COMMON.useGrimCitadels.set(useGrimCitadels);
 		COMMON.grimCitadelsRadius.set(grimCitadelsRadius);
 		COMMON.grimCitadelsCount.set(grimCitadelsCount);
 		COMMON.grimCitadelsList.set(grimCitadelsList);
@@ -223,11 +221,6 @@ public class MyConfig {
 		COMMON.grimFogGreenPercent.set (grimFogGreenPercent);
 	}
 	
-	public static void setUseGrimCitadels(boolean newValue) {
-		COMMON.useGrimCitadels.set(newValue);
-		useGrimCitadels = COMMON.useGrimCitadels.get();
-	}
-
 	
 	public static void setBonusRange(int newRange) {
 		COMMON.grimCitadelBonusDistance.set(newRange);
@@ -242,6 +235,9 @@ public class MyConfig {
 		grimCitadelPlayerCurseDistanceSq = grimCitadelPlayerCurseDistance * grimCitadelPlayerCurseDistance;
 	}
 
+
+
+	
 	// remember need to push each of these values separately once we have commands.
 	// this copies file changes into the running program variables.
 	
@@ -295,7 +291,6 @@ public class MyConfig {
 
 		public final IntValue debugLevel;
 		
-		public final BooleanValue useGrimCitadels;
 		public final IntValue grimCitadelsRadius;
 		public final IntValue grimCitadelsCount;
 		public final IntValue grimCitadelBonusDistance;
@@ -331,11 +326,6 @@ public class MyConfig {
 			builder.pop();
 
 			builder.push("Grim Citadel Settings");
-			
-			useGrimCitadels = builder
-					.comment("Use Grim Citadels (true) ")
-					.translation(Main.MODID + ".config." + "useGrimCitadels")
-					.define ("useGrimCitadels", () -> true);
 			
 			grimCitadelsList = builder
 					.comment("Grim Citadels List")

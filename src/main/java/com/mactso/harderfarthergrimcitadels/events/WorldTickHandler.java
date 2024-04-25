@@ -8,6 +8,8 @@ import com.mactso.harderfarthergrimcitadels.config.MyConfig;
 import com.mactso.harderfarthergrimcitadels.managers.GrimCitadelManager;
 import com.mactso.harderfarthergrimcitadels.network.Network;
 import com.mactso.harderfarthergrimcitadels.network.SyncFogToClientsPacket;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent.LevelTickEvent;
@@ -18,7 +20,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(bus = Bus.FORGE, modid = Main.MODID)
 public class WorldTickHandler {
-
+	private static boolean firstTime = true;
 	// assumes this event only raised for server worlds. TODO verify.
 	@SubscribeEvent
 	public static void onWorldTickEvent(LevelTickEvent event) {
@@ -45,6 +47,14 @@ public class WorldTickHandler {
 				if (gametime % 100 == sp.getId() % 100) {
 					Network.sendToClient(msg, sp);
 				}
+			}
+			
+			if (firstTime) {
+				firstTime = false;
+				for (BlockPos pos : GrimCitadelManager.realGCList) {
+					Main.difficultyCallProxy.addGrimBlockPosListEntry(pos, MyConfig.getGrimCitadelBonusDistance());
+				}
+		
 			}
 		}
 	}

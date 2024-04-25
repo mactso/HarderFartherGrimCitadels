@@ -13,10 +13,23 @@ public class RemoteCoreCalls implements IHarderFartherCoreProxy  {
 
 	@Override
 	public void addGrimBlockPosListEntry(BlockPos pos, int grimRange) {
+		HarderFartherManager.addGrimBlockPosListEntry(pos, grimRange);
+	}
+	
+	@Override
+	public void delGrimBlockPosListEntry(BlockPos pos) {
+		HarderFartherManager.delGrimBlockPosListEntry(pos);
+		
 	}
 	
 	@Override
 	public void addLifeBlockPosListEntry(BlockPos pos, int lifeRange) {
+		HarderFartherManager.addLifeBlockPosListEntry(pos, lifeRange);
+	}
+	
+	@Override
+	public void delLifeBlockPosListEntry(BlockPos pos) {
+		HarderFartherManager.delLifeBlockPosListEntry(pos);
 	}
 
 	@Override

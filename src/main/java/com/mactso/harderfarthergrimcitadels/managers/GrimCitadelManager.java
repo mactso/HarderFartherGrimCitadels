@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.mactso.harderfarthergrimcitadels.Main;
 import com.mactso.harderfarthergrimcitadels.block.GrimGateBlock;
 import com.mactso.harderfarthergrimcitadels.block.ModBlocks;
 import com.mactso.harderfarthergrimcitadels.block.properties.GrimGateType;
@@ -198,6 +199,7 @@ public class GrimCitadelManager {
 			dist = dist + MyConfig.getGrimCitadelBonusDistance();
 			BlockPos newHeartPos = BlockPos.containing(ssPos.getX() + (dist * xVec), -1, ssPos.getZ() + (dist * zVec));
 			realGCList.add(newHeartPos);
+			Main.difficultyCallProxy.addGrimBlockPosListEntry(newHeartPos, MyConfig.getGrimCitadelBonusDistance());
 			Utility.debugMsg(1, pos, "realGCList size:" + realGCList.size() + "Adding new HeartPos:" + newHeartPos);
 		}
 	}
@@ -1192,6 +1194,7 @@ public class GrimCitadelManager {
 			BlockPos gPos = iter.next();
 			if ((gPos.getX() == pos.getX()) && gPos.getZ() == pos.getZ()) {
 				iter.remove();
+				Main.difficultyCallProxy.delGrimBlockPosListEntry(pos);
 				addOptionalNewHearts(level, gPos);
 				save();
 				updateGCLocationsToClients(level);

@@ -16,19 +16,19 @@ public class FogColorsEventHandler {
 	private static float sliderStartFogDistance = 1.0f;
 	
 	private static double RedFromServer = .85f;
-	private static double GreenFromserver = 0.2f;
+	private static double GreenFromServer = 0.2f;
 	private static double BlueFromServer = 0.3f;
 
 	// r,g,b should always be 0 to 1.0f
 	public static void setFogRGB(double r, double g, double b) {
 
 		RedFromServer = r;
-		GreenFromserver = g;
+		GreenFromServer = g;
 		BlueFromServer = b;
 		
 		if ((ClientSideDifficultyCache.getGrimDifficulty() == 0)) {
 			RedFromServer = r * 0.77;
-			GreenFromserver = Math.min(1, g*1.1);
+			GreenFromServer = Math.min(1, g*1.1);
 		}
 
 	}
@@ -39,19 +39,6 @@ public class FogColorsEventHandler {
 
 	private int antiSpam = 0;
 
-	private void adjustFogColor(ComputeFogColor event, float slider) {
-
-		double redSlider = Math.max(RedFromServer, slider);
-		double greenSlider = Math.max(GreenFromserver, slider);
-		double blueSlider = Math.max(BlueFromServer, slider);
-//		if (++antiSpam%100 == 0)
-//		System.out.println("fog color slider:" + slider);
-		if (slider != 0) {
-			event.setRed(event.getRed() * (float) redSlider);
-			event.setGreen(event.getGreen() * (float) greenSlider);
-			event.setBlue(event.getBlue() * (float) blueSlider);
-		}
-	}
 
 	private void adjustFogDistance(RenderFog event, float closeFogPercent, float farFogPercent) {
 
@@ -76,8 +63,11 @@ public class FogColorsEventHandler {
 		final double slideAmount = 0.005f;
 		if (slider > target+0.005f) {
 			slider -= slideAmount;
+			// TODO
+			System.out.println("Slide down to " + slider);
 		} else if (slider < target-0.005f) {
 			slider += slideAmount;
+			System.out.println("Slide up to " + slider);
 		} else {
 			slider = target;
 		}
@@ -91,18 +81,36 @@ public class FogColorsEventHandler {
 		Minecraft m = Minecraft.getInstance();
 		LocalPlayer cp = m.player;
 		long gametick = cp.level().getGameTime();
-		if ((colorTick != gametick)) {
-			colorTick = gametick;
-			float percent = ClientSideDifficultyCache.getGrimDifficulty();
-			if ((percent > 0) && (percent < 0.1f)){
-				percent = 0.1f;
-			}
-			percent = Math.max(percent, 0.00f);
-			percent = Math.min(percent, 1.0f);
-			sliderColorPercent = doSlideToPercent(sliderColorPercent, 1 - percent);
-		}
+		// System.out.println ("gametick = " + gametick);
+		float percent = ClientSideDifficultyCache.getGrimDifficulty();
+		if ((percent > 0) && (percent < 0.1f)){
+			percent = 0.1f;
+		} 
+//		else if (percent > 0.8f) {
+//			percent = 0.8f;
+//		}
 
-		adjustFogColor(event, sliderColorPercent);
+		float modifier = percent ;
+        float oldRed = event.getRed() * (1-modifier);
+        float oldGreen = event.getGreen() * (1-modifier);
+        float oldBlue = event.getBlue() * (1-modifier);
+
+        float pctRed = (float) RedFromServer * modifier;
+        float pctGreen = (float) GreenFromServer * modifier; 
+        float pctBlue = (float) BlueFromServer * modifier; 
+
+        float newRed = oldRed + pctRed;
+        float newGreen = oldGreen+ pctGreen;
+        float newBlue = oldBlue + pctBlue;
+        
+        
+        System.out.println( "evt:" + event.getRed() + ", " + event.getGreen() + " ," + event.getBlue() );
+        System.out.println ("old:" + oldRed + ", " + oldGreen + ", " + oldBlue + " .");
+        System.out.println ("new:" + newRed + ", " + newGreen + ", " + newBlue + " .");
+		event.setRed((float) newRed);
+		event.setGreen((float) newGreen);
+		event.setBlue((float) newBlue);		
+	
 	}
 
 	// Density of Fog- not Color
@@ -122,8 +130,8 @@ public class FogColorsEventHandler {
 					percent = 0.05f;
 				}
 				
-				if (percent > 0.75) {
-					percent -= (percent - 0.70)*2.5;
+				if (percent > 0.9) {
+					percent -= (percent - 0.8)*2.5;
 				}
 				percent = Math.max(0, percent);
 				percent = Math.min(percent, 1.0f);
