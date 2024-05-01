@@ -3,7 +3,6 @@ package com.mactso.harderfarthergrimcitadels.block;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -20,7 +19,7 @@ public class ModBlocks
 {
 	public static final Block GRIM_HEART = 
 			new GrimHeartBlock(BlockBehaviour
-					.Properties.of().mapColor(MapColor.COLOR_PURPLE).lightLevel((state) -> { return 7;}).sound(SoundType.METAL).pushReaction(PushReaction.DESTROY), ParticleTypes.FLAME
+					.Properties.of().mapColor(MapColor.COLOR_PURPLE).lightLevel((state) -> { return 7;}).sound(SoundType.METAL).pushReaction(PushReaction.DESTROY)
 					);
 	
 	public static final Block GRIM_GATE = 

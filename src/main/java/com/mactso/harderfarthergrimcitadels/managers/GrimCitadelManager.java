@@ -666,10 +666,9 @@ public class GrimCitadelManager {
 
 	private static void createHeartLoot(ServerLevel level, BlockPos pos) {
 		level.setBlockAndUpdate(pos.below(), Blocks.GRAY_SHULKER_BOX.defaultBlockState());
-		RandomizableContainerBlockEntity.setLootTable(level, level.random, pos.below(),
-				BuiltInLootTables.NETHER_BRIDGE);
+		
 		ShulkerBoxBlockEntity sBox = (ShulkerBoxBlockEntity) level.getBlockEntity(pos.below());
-
+		sBox.setLootTable(BuiltInLootTables.NETHER_BRIDGE);
 		ItemStack itemStackToDrop;
 
 		itemStackToDrop = new ItemStack(ModItems.LIFE_HEART);
@@ -1126,10 +1125,8 @@ public class GrimCitadelManager {
 		if ((fy % 12 == 0)&&(fy<60)) {
 			if (level.getBlockState(savePos.south(fx).east(fz).below()).getBlock() != ModBlocks.GRIM_GATE) {
 				level.setBlock(savePos.south(fx).east(fz), Blocks.CHEST.defaultBlockState(), 3);
-				RandomizableContainerBlockEntity.setLootTable(level, level.random, savePos.south(fx).east(fz),
-						BuiltInLootTables.NETHER_BRIDGE);
 				ChestBlockEntity cBox = (ChestBlockEntity) level.getBlockEntity(savePos.south(fx).east(fz));
-
+				cBox.setLootTable(BuiltInLootTables.NETHER_BRIDGE);
 				ItemStack itemStackToDrop = new ItemStack(ModItems.BURNISHING_STONE,
 						(int) level.getRandom().nextInt(3) + 1);
 				Utility.setLore(itemStackToDrop, Component.Serializer

@@ -89,16 +89,13 @@ public class LivingEventMovementHandler {
 				Utility.debugMsg(2, le, "Living Event " + EntityType.getKey((event.getEntity().getType())).toString()
 						+ " dif: " + difficulty);
 				
-				if ((rand.nextInt(350000) == 4242) && (difficulty > Utility.Pct09)) {
-					Network.sendToClient(new GrimClientSongPacket(ModSounds.NUM_DUSTY_MEMORIES), sp);
-				}
-
-
 				if (Main.difficultyCallProxy.getDifficulty(le.blockPosition()) > 0) {
-					Glooms.doGlooms(serverLevel, gameTime, difficulty, le, Glooms.GRIM);
-					if ((le instanceof ServerPlayer) && (rand.nextInt(144000) == 4242)
-							&& (difficulty > Utility.Pct09)) {
-						Network.sendToClient(new GrimClientSongPacket(ModSounds.NUM_DUSTY_MEMORIES), sp);
+					if (GrimCitadelManager.isInRangeOfGC(le.blockPosition())) {
+						Glooms.doGlooms(serverLevel, gameTime, difficulty, le, Glooms.GRIM);
+						if ((le instanceof ServerPlayer) && (rand.nextInt(144000) == 4242)
+								&& (difficulty > Utility.Pct09)) {
+							Network.sendToClient(new GrimClientSongPacket(ModSounds.NUM_DUSTY_MEMORIES), sp);
+						}
 					}
 				}
 

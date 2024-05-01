@@ -104,9 +104,9 @@ public class FogColorsEventHandler {
         float newBlue = oldBlue + pctBlue;
         
         
-        System.out.println( "evt:" + event.getRed() + ", " + event.getGreen() + " ," + event.getBlue() );
-        System.out.println ("old:" + oldRed + ", " + oldGreen + ", " + oldBlue + " .");
-        System.out.println ("new:" + newRed + ", " + newGreen + ", " + newBlue + " .");
+//        System.out.println( "evt:" + event.getRed() + ", " + event.getGreen() + " ," + event.getBlue() );
+//        System.out.println ("old:" + oldRed + ", " + oldGreen + ", " + oldBlue + " .");
+//        System.out.println ("new:" + newRed + ", " + newGreen + ", " + newBlue + " .");
 		event.setRed((float) newRed);
 		event.setGreen((float) newGreen);
 		event.setBlue((float) newBlue);		

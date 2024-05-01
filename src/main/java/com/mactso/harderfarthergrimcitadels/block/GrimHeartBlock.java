@@ -6,6 +6,7 @@ import com.mactso.harderfarthergrimcitadels.blockentities.GrimHeartBlockEntity;
 import com.mactso.harderfarthergrimcitadels.client.PlayGrimSongs;
 import com.mactso.harderfarthergrimcitadels.managers.GrimCitadelManager;
 import com.mactso.harderfarthergrimcitadels.sounds.ModSounds;
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -27,13 +28,21 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class GrimHeartBlock extends BaseEntityBlock {
+	
+	public static final MapCodec<GrimHeartBlock> CODEC = simpleCodec(GrimHeartBlock::new);
 	protected final ParticleOptions particle;
 	protected static final VoxelShape SHAPE = Block.box(7.0D, 7.0D, 7.0D, 10.0D, 10.0D, 10.0D);
 
 	
-	public GrimHeartBlock(Properties properties, ParticleOptions particleChoice) {
+	@Override
+	public MapCodec<? extends GrimHeartBlock> codec() {
+		return CODEC;
+	}
+
+	
+	public GrimHeartBlock(Properties properties) {
 		super(properties);
-	    this.particle = particleChoice;
+	    this.particle = ParticleTypes.FLAME;
 	}
 
 	@Override
@@ -62,6 +71,7 @@ public class GrimHeartBlock extends BaseEntityBlock {
 
 		return 171;
 	}
+	
 
 	@Override
 	public void onRemove(BlockState oldbs, Level level, BlockPos pos, BlockState newbs, boolean moving) {

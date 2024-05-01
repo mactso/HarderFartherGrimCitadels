@@ -163,7 +163,7 @@ public class Glooms {
 
 			fishTimer = gameTime + 600;
 			List<Guardian> listG = serverLevel.getEntitiesOfClass(Guardian.class,
-					new AABB(pos.north(32).west(32).above(8), pos.south(32).east(32).below(8)));
+					AABB.encapsulatingFullBlocks(pos.north(32).west(32).above(8), pos.south(32).east(32).below(8)));
 			if (listG.size() > 5)
 				return;
 			float pitch = 0.7f;
@@ -430,7 +430,6 @@ public class Glooms {
 			}
 		}
 		doGrimPlayerCurses(difficulty, gloomType, amplitude, sp, hasLifeHeart);
-		doTimePlayerCurses(difficulty, gloomType, amplitude, sp);
 	}
 
 	private static void doTimePlayerCurses(float difficulty, int gloomType, int amplitude, ServerPlayer sp) {

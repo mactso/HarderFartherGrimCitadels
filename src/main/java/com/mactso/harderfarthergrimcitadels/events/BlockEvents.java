@@ -235,7 +235,7 @@ public class BlockEvents {
 	public static void onExplosionDetonate(Detonate event) {
 		Level level = event.getLevel();
 		List<BlockPos> list = event.getAffectedBlocks();
-		Vec3 vPos = event.getExplosion().getPosition();
+		Vec3 vPos = event.getExplosion().center();
 		if (GrimCitadelManager
 				.getClosestGrimCitadelDistanceSq(BlockPos.containing(vPos.x, vPos.y, vPos.z)) <= PROTECTED_DISTANCE) {
 			for (ListIterator<BlockPos> iter = list.listIterator(list.size()); iter.hasPrevious();) {
